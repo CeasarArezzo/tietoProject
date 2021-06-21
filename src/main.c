@@ -9,6 +9,8 @@ char* getFileByLine(FILE * fp)
     char chunk[128];
     size_t len = sizeof(chunk);
     char *line = malloc(len);
+    char *toReturn = malloc(0);
+    size_t currSize = 0;
     if (line != NULL)
     {
         line[0] = '\0';
@@ -33,13 +35,17 @@ char* getFileByLine(FILE * fp)
 
             if(line[len_used - 1] == '\n') 
             {
-                fputs(line, stdout);
+                currSize += len_used;
+                toReturn = realloc(toReturn, currSize);
+                strcat(toReturn, line);
+                // fputs(line, stdout);
                 // fputs("|*\n", stdout);
                 line[0] = '\0';
             }
         }
+        // fputs(toReturn, stdout);
     }
-    return 0;
+    return toReturn;
 }
 
 char* getFileByChar(FILE * fp)
@@ -55,6 +61,9 @@ int main(int argc, char* argv[argc+1])
     FILE *fp = fopen("/proc/stat", "rb");
     
     char * buffer = getFileByLine(fp);
+    fputs(buffer, stdout);
+    char * buffer = getFileByChar(fp);
+    fputs(buffer, stdout);
     // char chunk[128];
     // size_t length = sizeof(chunk);
     // buffer = malloc(length);
