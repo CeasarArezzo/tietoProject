@@ -54,21 +54,20 @@ char* getFileByLine(FILE * fp)
     return toReturn;
 }
 
-char* getFileByChar(FILE * fp)
-{
-    return NULL;
-}
+void test_circular_buffer();
 
 int main() 
 {
+    test_circular_buffer();
+    return EXIT_SUCCESS;
     cbuf_handle_t myBuf = circular_buf_init(5);
-    char* tmp = malloc(sizeof(char) * 10);
-    tmp = "kanapka";
+    // char* tmp = malloc(sizeof(char) * 10);
+    char* tmp = "kanapka";
     circular_buf_insert(myBuf, tmp);
     tmp = NULL;
     char* res = 0;
     puts("here");
-    printf("%s\n", circular_buf_pop(myBuf, &res));
+    printf("%s\n", circular_buf_pop(myBuf));
     puts("here");
     return 0;
     pthread_t reader_thread;
@@ -122,4 +121,18 @@ int main()
     // }
 
     return EXIT_SUCCESS;
+}
+
+void test_circular_buffer()
+{
+    puts("testing circular buffer");
+    cbuf_handle_t cbuf = circular_buf_init(5);
+    char* tmp[] = {"s0", "s1", "s2", "s3", "s4", "s5"};
+    char* res = circular_buf_pop(cbuf);
+    if(res == NULL)
+    {
+        puts("poping from empty - passed");
+    }
+    circular_buf_insert(cbuf, tmp[0]);
+    puts(circular_buf_pop(cbuf));
 }

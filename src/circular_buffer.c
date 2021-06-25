@@ -21,7 +21,7 @@ cbuf_handle_t circular_buf_init(size_t size)
         cbuf_handle_t cbuf = malloc(sizeof(circular_buf_t));
         if (cbuf)
         {
-            cbuf->buffer = malloc(size * sizeof(char*));
+            cbuf->buffer = calloc(size, sizeof(char*));
             cbuf->head = 0;
             cbuf->tail = 0;
 	        cbuf->capacity = size;
@@ -54,7 +54,7 @@ size_t circular_buf_insert(cbuf_handle_t cbuf, char* data)
     return 1;
 }
 
-char* circular_buf_pop(cbuf_handle_t cbuf, char** data)
+char* circular_buf_pop(cbuf_handle_t cbuf)
 {
     if (cbuf)
     {
