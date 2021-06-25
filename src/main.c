@@ -9,6 +9,7 @@
 
 char* getFileByLine(FILE * fp)
 {
+    cbuf_handle_t tmp = circular_buf_init(10);
     char chunk[DEFAULT_LEN];
     size_t len = sizeof(chunk);
     char *line = malloc(len);
@@ -60,8 +61,18 @@ char* getFileByChar(FILE * fp)
 
 int main() 
 {
-    pthread_t readerThread;
-    pthread_create(&readerThread, NULL, &readerFunc, NULL);
+    cbuf_handle_t myBuf = circular_buf_init(5);
+    char* tmp = malloc(sizeof(char) * 10);
+    tmp = "kanapka";
+    circular_buf_insert(myBuf, tmp);
+    tmp = NULL;
+    char* res = 0;
+    puts("here");
+    printf("%s\n", circular_buf_pop(myBuf, &res));
+    puts("here");
+    return 0;
+    pthread_t reader_thread;
+    pthread_create(&reader_thread, NULL, &readerFunc, NULL);
     FILE *fp = fopen("/proc/stat", "rb");
     
     if (fp != NULL)
@@ -71,9 +82,8 @@ int main()
         free(buffer);
         fclose(fp);
     }
-    // int foo = 5;
-    // char bar[foo];
-    pthread_join(readerThread, NULL);
+    pthread_join(reader_thread, NULL);
+
     // fp = fopen("/proc/stat", "rb");
     // buffer = getFileByChar(fp);
     // fputs(buffer, stdout);

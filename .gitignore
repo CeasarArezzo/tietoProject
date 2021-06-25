@@ -1,2 +1,5 @@
 main
 src/*.o
+.vscode/
+CMake*
+cmake*
