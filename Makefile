@@ -124,6 +124,33 @@ main/fast:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
+src/analyzer.o: src/analyzer.c.o
+
+.PHONY : src/analyzer.o
+
+# target to build an object file
+src/analyzer.c.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/analyzer.c.o
+.PHONY : src/analyzer.c.o
+
+src/analyzer.i: src/analyzer.c.i
+
+.PHONY : src/analyzer.i
+
+# target to preprocess a source file
+src/analyzer.c.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/analyzer.c.i
+.PHONY : src/analyzer.c.i
+
+src/analyzer.s: src/analyzer.c.s
+
+.PHONY : src/analyzer.s
+
+# target to generate assembly for a file
+src/analyzer.c.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/analyzer.c.s
+.PHONY : src/analyzer.c.s
+
 src/circular_buffer.o: src/circular_buffer.c.o
 
 .PHONY : src/circular_buffer.o
@@ -150,6 +177,33 @@ src/circular_buffer.s: src/circular_buffer.c.s
 src/circular_buffer.c.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/circular_buffer.c.s
 .PHONY : src/circular_buffer.c.s
+
+src/lifetime_struct.o: src/lifetime_struct.c.o
+
+.PHONY : src/lifetime_struct.o
+
+# target to build an object file
+src/lifetime_struct.c.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/lifetime_struct.c.o
+.PHONY : src/lifetime_struct.c.o
+
+src/lifetime_struct.i: src/lifetime_struct.c.i
+
+.PHONY : src/lifetime_struct.i
+
+# target to preprocess a source file
+src/lifetime_struct.c.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/lifetime_struct.c.i
+.PHONY : src/lifetime_struct.c.i
+
+src/lifetime_struct.s: src/lifetime_struct.c.s
+
+.PHONY : src/lifetime_struct.s
+
+# target to generate assembly for a file
+src/lifetime_struct.c.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/lifetime_struct.c.s
+.PHONY : src/lifetime_struct.c.s
 
 src/main.o: src/main.c.o
 
@@ -214,9 +268,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... main"
+	@echo "... src/analyzer.o"
+	@echo "... src/analyzer.i"
+	@echo "... src/analyzer.s"
 	@echo "... src/circular_buffer.o"
 	@echo "... src/circular_buffer.i"
 	@echo "... src/circular_buffer.s"
+	@echo "... src/lifetime_struct.o"
+	@echo "... src/lifetime_struct.i"
+	@echo "... src/lifetime_struct.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
