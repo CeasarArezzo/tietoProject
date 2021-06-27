@@ -1,26 +1,15 @@
 #include <stdlib.h>
 #include <lifetime_struct.h>
-#include <pthread.h>
-#include <semaphore.h>
-#include <circular_buffer.h>
 
 #define BUFFER_SIZE 256
 #define SEM_INIT_VALUE 0
-
-struct lifetime_struct {
-	cbuf_handle analyzer_buffer;
-	cbuf_handle printer_buffer;
-    pthread_mutex_t analyzer_mutex;
-    pthread_mutex_t printer_mutex;
-    sem_t analyzer_semaphore;
-    sem_t printer_semaphore;
-};
 
 lifetime_struct* init_lifetime_struct()
 {
     lifetime_struct* ltime = malloc(sizeof(lifetime_struct));
     if (ltime)
     {
+        ltime->running = true;
         ltime->analyzer_buffer = circular_buf_init(BUFFER_SIZE);
         if (pthread_mutex_init(&ltime->analyzer_mutex, NULL))
         {
@@ -59,14 +48,4 @@ void lifetime_struct_free(lifetime_struct* ltime)
         sem_destroy(&ltime->printer_semaphore);
         free(ltime);
     }
-}
-
-cbuf_handle get_analyzer_buffer(lifetime_struct* ltime)
-{
-    return ltime->analyzer_buffer;
-}
-
-cbuf_handle get_printer_buffer(lifetime_struct* ltime)
-{
-    return ltime->printer_buffer;
 }

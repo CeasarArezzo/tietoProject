@@ -1,31 +1,32 @@
 #include <reader.h>
 #include <stdio.h>
 #include <string.h>
-#include <circular_buffer.h>
-#include <lifetime_struct.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <circular_buffer.h>
+#include <lifetime_struct.h>
 
 #define MAX_LEN 256
 #define DEFAULT_SIZE 256
 
-void *analyzer_func(void* param)
+void *reader_func(void* param)
 {
     lifetime_struct* lifetime = param;
-    cbuf_handle analyzer_buffer = get_analyzer_buffer(lifetime);
 
-    while(1)
+    // for (size_t i = 0; i < 5; i++)
+    while(lifetime->running)
     {
         FILE *fp = fopen("/proc/stat", "rb");
         char* to_send = getFileByLine(fp);
-        circular_buf_insert(analyzer_buffer, to_send);
-        // fputs(to_send, stdout);
-        puts("reader sent data to analyzer");
-        // free(to_send);
+        
+        pthread_mutex_lock(&lifetime->analyzer_mutex);
+        circular_buf_insert(lifetime->analyzer_buffer, to_send);
+        pthread_mutex_unlock(&lifetime->analyzer_mutex);
+        sem_post(&lifetime->analyzer_semaphore);
+        puts("\treader sent data to analyzer");
         fclose(fp);
         sleep(1);
     }
-    puts("dupa");
     return 0;
 }
 

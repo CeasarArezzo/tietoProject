@@ -2,7 +2,7 @@
 #define READER_H
 #include <stdio.h>
 
-void* analyzer_func(void*);
+void* reader_func(void*);
 char* getFileByLine(FILE * fp);
 
 #endif

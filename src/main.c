@@ -1,11 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <pthread.h>
-#include <reader.h>
 #include <string.h>
+#include <pthread.h>
 #include <circular_buffer.h>
 #include <lifetime_struct.h>
+#include <reader.h>
+#include <analyzer.h>
 
+void run_tests();
 void test_circular_buffer();
 void run_threads();
 
@@ -15,60 +17,11 @@ int main(int argc, char **argv)
     {
         if (strcmp(argv[1], "-t") == 0)
         {
-            puts("test mode");
-            test_circular_buffer();
+            run_tests();
             return EXIT_SUCCESS;
         }
     }
     run_threads();
-    // cbuf_handle myBuf = circular_buf_init(5);
-    // circular_buf_pop(myBuf);
-    // // char* tmp = malloc(sizeof(char) * 10);
-    // char* tmp = "kanapka";
-    // circular_buf_insert(myBuf, tmp);
-    // printf("%s\n", circular_buf_pop(myBuf));
-    // tmp = "kanapka2";
-    // circular_buf_insert(myBuf, tmp);
-    // tmp = NULL;
-    // char* res = 0;
-    // printf("%s\n", circular_buf_pop(myBuf));
-
-    // fp = fopen("/proc/stat", "rb");
-    // buffer = getFileByChar(fp);
-    // fputs(buffer, stdout);
-
-    // char last;
-    // last = '0';
-    // for (size_t i = 0; i < 5000; i++)
-    // {
-    //     char * buffer = getFileByLine(fp);
-    //     fseek(fp, 0, SEEK_SET);
-    //     // printf("%c\n", buffer[8]);
-    //     if (buffer[8] != last && i != 0)
-    //     {
-    //         printf("zmiana %c -> %c na %lu\n", last, buffer[8], i);
-    //     }
-    //     last = buffer[8];
-    //     // fputs(buffer, stdout);
-    //     free(buffer);
-    //     // fputs(buffer[10], stdout);
-    // }
-    // char * buffer = getFileByLine(fp);
-    // fputs(buffer, stdout);
-    // char chunk[128];
-    // size_t length = sizeof(chunk);
-    // buffer = malloc(length);
-
-    // if(fp && buffer)
-    // {
-    //     buffer[0] = '\0';
-    //     while(fgets(chunk, sizeof(chunk), fp) != NULL) 
-    //         {
-    //             fputs(chunk, stdout);
-    //             fputs("|*\n", stdout);  // marker string used to show where the content of the chunk array has ended
-    //         }
-    //     fclose(fp);
-    // }
 
     return EXIT_SUCCESS;
 }
@@ -77,10 +30,20 @@ void run_threads()
 {
     lifetime_struct* lifetime = init_lifetime_struct();
     pthread_t reader_thread;
-    pthread_create(&reader_thread, NULL, &analyzer_func, lifetime);
+    pthread_t analyzer_thread;
+    pthread_create(&reader_thread, NULL, &reader_func, lifetime);
+    pthread_create(&analyzer_thread, NULL, &analyzer_func, lifetime);
     
     pthread_join(reader_thread, NULL);
+    pthread_join(analyzer_thread, NULL);
     lifetime_struct_free(lifetime);
+    puts("job done");
+}
+
+void run_tests()
+{
+    puts("test mode");
+    test_circular_buffer();
 }
 
 void test_circular_buffer()
