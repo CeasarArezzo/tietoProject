@@ -13,7 +13,8 @@ void *reader_func(void* param)
 
     while(lifetime->running)
     {
-        FILE *fp = fopen("/proc/stat", "rb");
+        //read data from file and send it to analyzer
+        FILE *fp = fopen("/proc/stat", "r");
         char* to_send = getFileByLine(fp);
         
         pthread_mutex_lock(&lifetime->analyzer_mutex);

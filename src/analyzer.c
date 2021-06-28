@@ -6,12 +6,13 @@
 #include <lifetime_struct.h>
 #include <consts.h>
 
-
 size_t* prev_idle;
 size_t* prev_total;
 size_t* curr_idle;
 size_t* curr_total;
 size_t cpu_amount;
+
+//TODO: define indeksów
 
 void* analyzer_func(void* param)
 {
@@ -40,6 +41,13 @@ void* analyzer_func(void* param)
     return 0;
 }
 
+/**
+ * @brief read first line of buffer and store it into passed variables
+ * 
+ * @param curr_read buffer to read file from, should come from /proc/stat file, first encountered cpu will be measured
+ * @param idle pointer to location to store idle time
+ * @param total pointer to location to store total time
+ */
 void calculate_usage(char* curr_read, size_t* idle, size_t* total)
 {
     size_t* new_data = calloc(sizeof(size_t), USED_COLS_AMOUNT);
@@ -57,6 +65,12 @@ void calculate_usage(char* curr_read, size_t* idle, size_t* total)
     free(new_data);
 }
 
+/**
+ * @brief for every core mentioned in passed buffer, calculate average usage since last call
+ * 
+ * @param curr_read pointer to buffer containing data to be processed
+ * @return char* output string ready to be printed containing data about cpu usage
+ */
 char* process_data(char* curr_read)
 {
     char* to_return = calloc(sizeof(char), strlen(cpu_message) * cpu_amount + 1);
@@ -73,6 +87,7 @@ char* process_data(char* curr_read)
         size_t idle_diff = curr_idle[i] - prev_idle[i];
         long double usage = (long double)(total_diff - idle_diff) / total_diff;
         char* tmp = calloc(sizeof(char), strlen(cpu_message));
+        //attach cpu usage to message to be sent, multiplied by 100 to get percentage
         snprintf(tmp, strlen(cpu_message), cpu_message, i, usage*100);
         to_return = strcat(to_return, tmp);
         free(tmp);
@@ -96,6 +111,11 @@ void first_process(char* curr_read)
         curr_read = strstr(curr_read+1, "cpu");
         
     }
+}
+
+void init_data()
+{
+    
 }
 
 char* pop_once_analyzer(lifetime_struct* ltime)
