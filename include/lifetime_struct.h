@@ -6,12 +6,12 @@
 #include <stdbool.h>
 
 typedef struct lifetime_struct{
-	cbuf_handle              analyzer_buffer;
-	cbuf_handle              printer_buffer;
     pthread_mutex_t          analyzer_mutex;
     pthread_mutex_t          printer_mutex;
     sem_t                    analyzer_semaphore;
     sem_t                    printer_semaphore;
+	circular_buf*              analyzer_buffer;
+	circular_buf*              printer_buffer;
     volatile _Atomic(bool)   running;
 } lifetime_struct;
 

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <lifetime_struct.h>
 
 static const size_t SEM_INIT_VALUE = 0;

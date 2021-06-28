@@ -16,14 +16,14 @@ struct circular_buf {
     bool full;
 };
 
-static void insert_move(cbuf_handle cbuf);
-static void pop_move(cbuf_handle cbuf);
+static void insert_move(circular_buf* cbuf);
+static void pop_move(circular_buf* cbuf);
 
-cbuf_handle circular_buf_init(size_t size)
+circular_buf* circular_buf_init(size_t size)
 {
     if (size)
     {
-        cbuf_handle cbuf = malloc(sizeof(circular_buf));
+        circular_buf* cbuf = malloc(sizeof(circular_buf));
         if (cbuf)
         {
             cbuf->buffer = calloc(size, sizeof(char*));
@@ -37,7 +37,7 @@ cbuf_handle circular_buf_init(size_t size)
     return NULL;
 }
 
-void circular_buf_free(cbuf_handle cbuf)
+void circular_buf_free(circular_buf* cbuf)
 {
     if (cbuf)
     {
@@ -50,7 +50,7 @@ void circular_buf_free(cbuf_handle cbuf)
     }
 }
 
-size_t circular_buf_insert(cbuf_handle cbuf, char* data)
+size_t circular_buf_insert(circular_buf* cbuf, char* data)
 {
     if (cbuf)
     {
@@ -61,7 +61,7 @@ size_t circular_buf_insert(cbuf_handle cbuf, char* data)
     return 1;
 }
 
-char* circular_buf_pop(cbuf_handle cbuf)
+char* circular_buf_pop(circular_buf* cbuf)
 {
     if (cbuf)
     {
@@ -75,7 +75,7 @@ char* circular_buf_pop(cbuf_handle cbuf)
     return NULL;
 }
 
-bool circular_buf_empty(cbuf_handle cbuf)
+bool circular_buf_empty(circular_buf* cbuf)
 {
     if (cbuf)
     {
@@ -84,7 +84,7 @@ bool circular_buf_empty(cbuf_handle cbuf)
     return NULL;
 }
 
-bool circular_buf_full(cbuf_handle cbuf)
+bool circular_buf_full(circular_buf* cbuf)
 {
     if (cbuf)
     {
@@ -93,7 +93,7 @@ bool circular_buf_full(cbuf_handle cbuf)
     return NULL;
 }
 
-size_t circular_buf_capacity(cbuf_handle cbuf, size_t* res)
+size_t circular_buf_capacity(circular_buf* cbuf, size_t* res)
 {
     if (cbuf)
     {
@@ -103,7 +103,7 @@ size_t circular_buf_capacity(cbuf_handle cbuf, size_t* res)
     return 1;
 }
 
-size_t circular_buf_size(cbuf_handle cbuf, size_t* res)
+size_t circular_buf_size(circular_buf* cbuf, size_t* res)
 {
     if (cbuf)
     {
@@ -125,7 +125,7 @@ size_t circular_buf_size(cbuf_handle cbuf, size_t* res)
     return 1;
 }
 
-static void insert_move(cbuf_handle cbuf)
+static void insert_move(circular_buf* cbuf)
 {
 	assert(cbuf);
 
@@ -137,7 +137,7 @@ static void insert_move(cbuf_handle cbuf)
     cbuf->full = (cbuf->head == cbuf->tail);
 }
 
-static void pop_move(cbuf_handle cbuf)
+static void pop_move(circular_buf* cbuf)
 {
 	assert(cbuf);
     cbuf->full = false;

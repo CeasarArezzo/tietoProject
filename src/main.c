@@ -66,7 +66,7 @@ void run_tests()
 void test_circular_buffer()
 {
     puts("testing circular buffer");
-    cbuf_handle cbuf = circular_buf_init(5);
+    circular_buf* cbuf = circular_buf_init(5);
     char* tmp = calloc(sizeof(char*), 6);
     for (size_t i = 0; i < 6; i++)
     {
