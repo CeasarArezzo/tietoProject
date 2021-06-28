@@ -232,6 +232,33 @@ src/main.c.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.c.s
 .PHONY : src/main.c.s
 
+src/printer.o: src/printer.c.o
+
+.PHONY : src/printer.o
+
+# target to build an object file
+src/printer.c.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/printer.c.o
+.PHONY : src/printer.c.o
+
+src/printer.i: src/printer.c.i
+
+.PHONY : src/printer.i
+
+# target to preprocess a source file
+src/printer.c.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/printer.c.i
+.PHONY : src/printer.c.i
+
+src/printer.s: src/printer.c.s
+
+.PHONY : src/printer.s
+
+# target to generate assembly for a file
+src/printer.c.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/printer.c.s
+.PHONY : src/printer.c.s
+
 src/reader.o: src/reader.c.o
 
 .PHONY : src/reader.o
@@ -280,6 +307,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/printer.o"
+	@echo "... src/printer.i"
+	@echo "... src/printer.s"
 	@echo "... src/reader.o"
 	@echo "... src/reader.i"
 	@echo "... src/reader.s"

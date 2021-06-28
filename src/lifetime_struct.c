@@ -1,8 +1,6 @@
 #include <stdlib.h>
 #include <lifetime_struct.h>
-
-#define BUFFER_SIZE 256
-#define SEM_INIT_VALUE 0
+#include <consts.h>
 
 lifetime_struct* init_lifetime_struct()
 {

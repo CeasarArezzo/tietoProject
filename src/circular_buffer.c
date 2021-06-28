@@ -31,16 +31,6 @@ cbuf_handle circular_buf_init(size_t size)
             cbuf->tail = 0;
             cbuf->full = false;
 	        cbuf->capacity = size;
-            // if (pthread_mutex_init(&cbuf->lock, NULL))
-            // {
-            //     return NULL;
-            // }
-            // puts("mutex initialized");
-            // if(sem_init(&cbuf->empty, 0, SEM_INIT_VALUE))
-            // {
-            //     return NULL;
-            // }
-            // puts("semaphore initialized");
             return cbuf;
         }
     }
@@ -51,7 +41,10 @@ void circular_buf_free(cbuf_handle cbuf)
 {
     if (cbuf)
     {
-        //delete all data?
+        while(!circular_buf_empty(cbuf))
+        {
+            free(circular_buf_pop(cbuf));
+        }
         free(cbuf->buffer);
         free(cbuf);
     }
@@ -62,7 +55,6 @@ size_t circular_buf_insert(cbuf_handle cbuf, char* data)
     if (cbuf)
     {
         cbuf->buffer[cbuf->head] = data;
-        // printf("%s\n", cbuf->buffer[cbuf->head]);
         insert_move(cbuf);
         return 0;
     }
@@ -77,7 +69,6 @@ char* circular_buf_pop(cbuf_handle cbuf)
         {
             char* tmp = cbuf->buffer[cbuf->tail];
             pop_move(cbuf);
-            // printf("%s\n", tmp);
             return tmp;
         }
     }

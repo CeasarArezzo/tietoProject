@@ -12,7 +12,7 @@ typedef struct lifetime_struct{
     pthread_mutex_t printer_mutex;
     sem_t           analyzer_semaphore;
     sem_t           printer_semaphore;
-    _Atomic(bool)   running;
+    volatile _Atomic(bool)   running;
 } lifetime_struct;
 
 lifetime_struct* init_lifetime_struct();
