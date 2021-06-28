@@ -4,7 +4,6 @@
 #include <string.h>
 #include <circular_buffer.h>
 #include <lifetime_struct.h>
-#include <consts.h>
 
 size_t* prev_idle;
 size_t* prev_total;
@@ -13,6 +12,8 @@ size_t* curr_total;
 size_t cpu_amount;
 
 //TODO: define indeksów
+static const char* cpu_message = "cpu%zu: %.1Lf%%\t";
+static const size_t USED_COLS_AMOUNT = 8;
 
 void* analyzer_func(void* param)
 {

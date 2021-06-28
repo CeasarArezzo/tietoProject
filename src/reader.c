@@ -5,7 +5,8 @@
 #include <unistd.h>
 #include <circular_buffer.h>
 #include <lifetime_struct.h>
-#include <consts.h>
+
+static const size_t MAX_LEN = 256;
 
 void *reader_func(void* param)
 {
