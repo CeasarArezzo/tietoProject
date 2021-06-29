@@ -129,7 +129,6 @@ static void first_process(char* curr_read)
     {
         calculate_usage(curr_read, &curr_idle[i], &curr_total[i]);
         curr_read = strstr(curr_read+1, "cpu");
-        
     }
 }
 

@@ -7,6 +7,8 @@
 #define LOGGER_FILENAME "logger.txt"
 #define WRITE_MODE "w+"
 #define MAX_LOG_SIZE 256
+#define JOIN_TAG_MSG ":\t"
+#define ENDLINE "\n"
 
 static char* pop_once(lifetime_struct*);
 
@@ -43,12 +45,12 @@ void send_to_logger(char* tag, char* to_log, lifetime_struct* ltime)
         return;
     }
     //callocing +1 to keep space for \0 symbol
-    char* to_send = calloc(sizeof(char), strlen(tag) + strlen(to_log) + strlen(":\t") + strlen("\n") + 1);
+    char* to_send = calloc(sizeof(char), strlen(tag) + strlen(to_log) + strlen(JOIN_TAG_MSG) + strlen(ENDLINE) + 1);
     to_send[0] = '\0';
     to_send = strcat(to_send, tag);
-    to_send = strcat(to_send, ":\t");
+    to_send = strcat(to_send, JOIN_TAG_MSG);
     to_send = strcat(to_send, to_log);
-    to_send = strcat(to_send, "\n");
+    to_send = strcat(to_send, ENDLINE);
     pthread_mutex_lock(&ltime->logger_mutex);
     circular_buf_insert(ltime->logger_buffer, to_send);
     pthread_mutex_unlock(&ltime->logger_mutex);
