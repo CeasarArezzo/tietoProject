@@ -29,7 +29,16 @@ lifetime_struct* init_lifetime_struct()
         {
             return NULL;
         }
-        if (ltime->analyzer_buffer && ltime->printer_buffer)
+        ltime->logger_buffer = circular_buf_init(BUFFER_SIZE);
+        if (pthread_mutex_init(&ltime->logger_mutex, NULL))
+        {
+            return NULL;
+        }
+        if(sem_init(&ltime->logger_semaphore, 0, SEM_INIT_VALUE))
+        {
+            return NULL;
+        }
+        if (ltime->analyzer_buffer && ltime->printer_buffer && ltime->logger_buffer)
         {
             return ltime;
         }

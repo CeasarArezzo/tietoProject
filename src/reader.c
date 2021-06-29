@@ -6,7 +6,10 @@
 #include <circular_buffer.h>
 #include <lifetime_struct.h>
 
-static const size_t MAX_LEN = 256;
+#define FILENAME "/proc/stat"
+#define OPEN_MODE "r"
+#define MAX_LEN 256
+#define WAIT_TIME 1
 
 static char* getFileByLine(FILE * fp);
 
@@ -17,7 +20,7 @@ void *reader_func(void* param)
     while(lifetime->running)
     {
         //read data from file and send it to analyzer
-        FILE *fp = fopen("/proc/stat", "r");
+        FILE *fp = fopen(FILENAME, OPEN_MODE);
         char* to_send = getFileByLine(fp);
         
         pthread_mutex_lock(&lifetime->analyzer_mutex);
@@ -25,7 +28,7 @@ void *reader_func(void* param)
         pthread_mutex_unlock(&lifetime->analyzer_mutex);
         sem_post(&lifetime->analyzer_semaphore);
         fclose(fp);
-        sleep(1);
+        sleep(WAIT_TIME);
     }
     sem_post(&lifetime->analyzer_semaphore);
     // puts("reader done");

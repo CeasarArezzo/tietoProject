@@ -8,7 +8,7 @@
 #define IDLE_COLUMN_INDEX 3
 #define IOWAIT_COLUMN_INDEX 4
 #define USED_COLS_AMOUNT 8
-static const char* cpu_message = "cpu%zu: %.1Lf%%\t";
+static const char cpu_message[] = "cpu%zu: %.1Lf%%\t";
 
 static char* pop_once(lifetime_struct*);
 static size_t count_cores(char*);
@@ -17,11 +17,11 @@ static char* process_data(char*);
 static void init_data(void);
 static void calculate_usage(char*, size_t*, size_t*);
 
-size_t* prev_idle;
-size_t* prev_total;
-size_t* curr_idle;
-size_t* curr_total;
-size_t cpu_amount;
+static size_t* prev_idle;
+static size_t* prev_total;
+static size_t* curr_idle;
+static size_t* curr_total;
+static size_t cpu_amount;
 
 void* analyzer_func(void* param)
 {
