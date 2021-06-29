@@ -3,6 +3,6 @@
 #include <lifetime_struct.h>
 
 void* logger_func(void*);
-void send_to_logger(char*, lifetime_struct*);
+void send_to_logger(char*, char*, lifetime_struct*);
 
 #endif

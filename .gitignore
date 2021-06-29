@@ -4,3 +4,4 @@ src/*.o
 CMake*
 cmake*
 !CMakeLists.txt
+logger.txt

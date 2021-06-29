@@ -52,10 +52,13 @@ void lifetime_struct_free(lifetime_struct* ltime)
     {
         circular_buf_free(ltime->analyzer_buffer);
         circular_buf_free(ltime->printer_buffer);
+        circular_buf_free(ltime->logger_buffer);
         pthread_mutex_destroy(&ltime->analyzer_mutex);
         pthread_mutex_destroy(&ltime->printer_mutex);
+        pthread_mutex_destroy(&ltime->logger_mutex);
         sem_destroy(&ltime->analyzer_semaphore);
         sem_destroy(&ltime->printer_semaphore);
+        sem_destroy(&ltime->logger_semaphore);
         free(ltime);
     }
 }

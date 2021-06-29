@@ -4,11 +4,20 @@
 #include <string.h>
 #include <circular_buffer.h>
 #include <lifetime_struct.h>
+#include <logger.h>
 
 #define IDLE_COLUMN_INDEX 3
 #define IOWAIT_COLUMN_INDEX 4
 #define USED_COLS_AMOUNT 8
 static const char cpu_message[] = "cpu%zu: %.1Lf%%\t";
+
+#define log_tag "ANALYZER"
+#define msg_start "starting work"
+#define msg_init "first processing done"
+#define msg_received "got data from reader"
+#define msg_processed "analyzed data"
+#define msg_sent "sent data to printer"
+#define msg_end "ending work"
 
 static char* pop_once(lifetime_struct*);
 static size_t count_cores(char*);
@@ -26,10 +35,12 @@ static size_t cpu_amount;
 void* analyzer_func(void* param)
 {
     lifetime_struct* lifetime = param;
+    send_to_logger(log_tag, msg_start, lifetime);
     char* first_read = pop_once(lifetime);
     cpu_amount = count_cores(first_read);
     init_data();
     first_process(first_read);
+    send_to_logger(log_tag, msg_init, lifetime);
     free(first_read);
 
     while(lifetime->running)
@@ -37,16 +48,20 @@ void* analyzer_func(void* param)
         char* received = pop_once(lifetime);
         if (received)
         {
+            send_to_logger(log_tag, msg_received, lifetime);
             char* to_send = process_data(received);
+            send_to_logger(log_tag, msg_processed, lifetime);
             free(received);
 
             pthread_mutex_lock(&lifetime->printer_mutex);
             circular_buf_insert(lifetime->printer_buffer, to_send);
             pthread_mutex_unlock(&lifetime->printer_mutex);
+            send_to_logger(log_tag, msg_sent, lifetime);
         }
         sem_post(&lifetime->printer_semaphore);
     }
     free_data();
+    send_to_logger(log_tag, msg_end, lifetime);
     // puts("analyzer done");
     return 0;
 }
