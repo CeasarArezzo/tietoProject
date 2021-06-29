@@ -286,6 +286,33 @@ src/reader.c.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/reader.c.s
 .PHONY : src/reader.c.s
 
+src/tests.o: src/tests.c.o
+
+.PHONY : src/tests.o
+
+# target to build an object file
+src/tests.c.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/tests.c.o
+.PHONY : src/tests.c.o
+
+src/tests.i: src/tests.c.i
+
+.PHONY : src/tests.i
+
+# target to preprocess a source file
+src/tests.c.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/tests.c.i
+.PHONY : src/tests.c.i
+
+src/tests.s: src/tests.c.s
+
+.PHONY : src/tests.s
+
+# target to generate assembly for a file
+src/tests.c.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/tests.c.s
+.PHONY : src/tests.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -313,6 +340,9 @@ help:
 	@echo "... src/reader.o"
 	@echo "... src/reader.i"
 	@echo "... src/reader.s"
+	@echo "... src/tests.o"
+	@echo "... src/tests.i"
+	@echo "... src/tests.s"
 .PHONY : help
 
 

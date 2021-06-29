@@ -7,6 +7,7 @@ char* pop_once_analyzer(lifetime_struct*);
 size_t count_cores(char*);
 void first_process(char*);
 char* process_data(char*);
+void init_data();
 void calculate_usage(char*, size_t*, size_t*);
 void free_data();
 
