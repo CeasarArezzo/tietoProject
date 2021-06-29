@@ -20,7 +20,6 @@ void* logger_func(void* param)
     {
         char* read_message = pop_once(lifetime);
         fputs(read_message, fp);
-        // puts(read_message);
         free(read_message);
         fflush(fp);
     }
@@ -29,7 +28,6 @@ void* logger_func(void* param)
     {
         char* read_message = circular_buf_pop(lifetime->logger_buffer);
         fputs(read_message, fp);
-        // puts(read_message);
         free(read_message);
         fflush(fp);
     }

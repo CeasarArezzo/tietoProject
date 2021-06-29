@@ -62,12 +62,11 @@ void* analyzer_func(void* param)
     }
     free_data();
     send_to_logger(log_tag, msg_end, lifetime);
-    // puts("analyzer done");
     return 0;
 }
 
 /**
- * @brief read first line of buffer and store it into passed variables
+ * @brief read first line of buffer and store it into passed adressess
  * 
  * @param curr_read buffer to read file from, should come from /proc/stat file, first encountered cpu will be measured
  * @param idle pointer to location to store idle time
@@ -145,7 +144,6 @@ static char* pop_once(lifetime_struct* ltime)
     sem_wait(&ltime->analyzer_semaphore);
     if (!ltime->running)
     {
-        // puts("analyzer done prematurely");
         return NULL;
     }
     pthread_mutex_lock(&ltime->analyzer_mutex);
@@ -162,6 +160,7 @@ static size_t count_cores(char* first_read)
     while(new != NULL)
     {
         new++;
+        //find every line starting with 'cpu' after first one
         new = strstr(new, "cpu");
         if (new != NULL)
         {

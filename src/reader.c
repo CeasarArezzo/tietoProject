@@ -42,7 +42,6 @@ void *reader_func(void* param)
     }
     send_to_logger(log_tag, msg_end, lifetime);
     sem_post(&lifetime->analyzer_semaphore);
-    // puts("reader done");
     return 0;
 }
 
@@ -51,6 +50,7 @@ static char* getFileByLine(FILE * fp)
     char* to_return = calloc(sizeof(char), 1);
     char* buffer = calloc(sizeof(char), MAX_LEN);
     size_t curr_size = 0;
+    //-1 so space for \0 is kept
     while (fgets(buffer, MAX_LEN - 1, fp))
     {
         curr_size += strlen(buffer);
