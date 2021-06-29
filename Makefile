@@ -205,6 +205,33 @@ src/lifetime_struct.c.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/lifetime_struct.c.s
 .PHONY : src/lifetime_struct.c.s
 
+src/logger.o: src/logger.c.o
+
+.PHONY : src/logger.o
+
+# target to build an object file
+src/logger.c.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/logger.c.o
+.PHONY : src/logger.c.o
+
+src/logger.i: src/logger.c.i
+
+.PHONY : src/logger.i
+
+# target to preprocess a source file
+src/logger.c.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/logger.c.i
+.PHONY : src/logger.c.i
+
+src/logger.s: src/logger.c.s
+
+.PHONY : src/logger.s
+
+# target to generate assembly for a file
+src/logger.c.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/logger.c.s
+.PHONY : src/logger.c.s
+
 src/main.o: src/main.c.o
 
 .PHONY : src/main.o
@@ -331,6 +358,9 @@ help:
 	@echo "... src/lifetime_struct.o"
 	@echo "... src/lifetime_struct.i"
 	@echo "... src/lifetime_struct.s"
+	@echo "... src/logger.o"
+	@echo "... src/logger.i"
+	@echo "... src/logger.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

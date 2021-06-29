@@ -8,6 +8,8 @@
 
 static const size_t MAX_LEN = 256;
 
+static char* getFileByLine(FILE * fp);
+
 void *reader_func(void* param)
 {
     lifetime_struct* lifetime = param;
@@ -30,7 +32,7 @@ void *reader_func(void* param)
     return 0;
 }
 
-char* getFileByLine(FILE * fp)
+static char* getFileByLine(FILE * fp)
 {
     char* to_return = calloc(sizeof(char), 1);
     char* buffer = calloc(sizeof(char), MAX_LEN);

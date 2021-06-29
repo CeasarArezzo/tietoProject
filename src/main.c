@@ -9,13 +9,14 @@
 #include <printer.h>
 #include <tests.h>
 
-void run_threads();
+void run_threads(void);
 void term(int);
 
-lifetime_struct* lifetime;
+static lifetime_struct* lifetime;
 
 int main(int argc, char **argv) 
 {
+    // init_data();
     signal(SIGTERM, term);
 
     if (argc > 1)

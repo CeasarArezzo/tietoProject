@@ -5,11 +5,17 @@
 #include <circular_buffer.h>
 #include <lifetime_struct.h>
 
-//TODO: define indeksów
 #define IDLE_COLUMN_INDEX 3
 #define IOWAIT_COLUMN_INDEX 4
 #define USED_COLS_AMOUNT 8
 static const char* cpu_message = "cpu%zu: %.1Lf%%\t";
+
+static char* pop_once(lifetime_struct*);
+static size_t count_cores(char*);
+static void first_process(char*);
+static char* process_data(char*);
+static void init_data(void);
+static void calculate_usage(char*, size_t*, size_t*);
 
 size_t* prev_idle;
 size_t* prev_total;
@@ -20,7 +26,7 @@ size_t cpu_amount;
 void* analyzer_func(void* param)
 {
     lifetime_struct* lifetime = param;
-    char* first_read = pop_once_analyzer(lifetime);
+    char* first_read = pop_once(lifetime);
     cpu_amount = count_cores(first_read);
     init_data();
     first_process(first_read);
@@ -28,7 +34,7 @@ void* analyzer_func(void* param)
 
     while(lifetime->running)
     {
-        char* received = pop_once_analyzer(lifetime);
+        char* received = pop_once(lifetime);
         if (received)
         {
             char* to_send = process_data(received);
@@ -52,7 +58,7 @@ void* analyzer_func(void* param)
  * @param idle pointer to location to store idle time
  * @param total pointer to location to store total time
  */
-void calculate_usage(char* curr_read, size_t* idle, size_t* total)
+static void calculate_usage(char* curr_read, size_t* idle, size_t* total)
 {
     size_t* new_data = calloc(sizeof(size_t), USED_COLS_AMOUNT);
 
@@ -75,7 +81,7 @@ void calculate_usage(char* curr_read, size_t* idle, size_t* total)
  * @param curr_read pointer to buffer containing data to be processed
  * @return char* output string ready to be printed containing data about cpu usage
  */
-char* process_data(char* curr_read)
+static char* process_data(char* curr_read)
 {
     char* to_return = calloc(sizeof(char), strlen(cpu_message) * cpu_amount + 1);
 
@@ -101,7 +107,7 @@ char* process_data(char* curr_read)
     return to_return;
 }
 
-void first_process(char* curr_read)
+static void first_process(char* curr_read)
 {
     curr_read = strstr(curr_read, "cpu0");
     for (size_t i = 0; i < cpu_amount; i++)
@@ -112,7 +118,7 @@ void first_process(char* curr_read)
     }
 }
 
-void init_data()
+static void init_data()
 {
     prev_idle = malloc(sizeof(size_t*) * cpu_amount);
     prev_total = malloc(sizeof(size_t*) * cpu_amount);
@@ -120,7 +126,7 @@ void init_data()
     curr_total = malloc(sizeof(size_t*) * cpu_amount);
 }
 
-char* pop_once_analyzer(lifetime_struct* ltime)
+static char* pop_once(lifetime_struct* ltime)
 {
     sem_wait(&ltime->analyzer_semaphore);
     if (!ltime->running)
@@ -135,7 +141,7 @@ char* pop_once_analyzer(lifetime_struct* ltime)
     return received;
 }
 
-size_t count_cores(char* first_read)
+static size_t count_cores(char* first_read)
 {
     char* new = first_read+1;
     size_t curr_count = 0;

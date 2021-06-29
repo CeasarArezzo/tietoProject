@@ -3,12 +3,14 @@
 #include <lifetime_struct.h>
 #include <printer.h>
 
+static char* pop_once(lifetime_struct*);
+
 void* printer_func(void* param)
 {
     lifetime_struct* lifetime = param;
     while(lifetime->running)
     {
-        char* read_data = pop_once_printer(lifetime);
+        char* read_data = pop_once(lifetime);
         if (read_data)
         {
             puts(read_data);
@@ -16,9 +18,10 @@ void* printer_func(void* param)
         }
     }
     // puts("printer done");
+    return 0;
 }
 
-char* pop_once_printer(lifetime_struct* ltime)
+static char* pop_once(lifetime_struct* ltime)
 {
     sem_wait(&ltime->printer_semaphore);
     pthread_mutex_lock(&ltime->printer_mutex);
