@@ -5,21 +5,24 @@
 #include <circular_buffer.h>
 #include <lifetime_struct.h>
 
+//TODO: define indeksów
+#define IDLE_COLUMN_INDEX 3
+#define IOWAIT_COLUMN_INDEX 4
+#define USED_COLS_AMOUNT 8
+static const char* cpu_message = "cpu%zu: %.1Lf%%\t";
+
 size_t* prev_idle;
 size_t* prev_total;
 size_t* curr_idle;
 size_t* curr_total;
 size_t cpu_amount;
 
-//TODO: define indeksów
-static const char* cpu_message = "cpu%zu: %.1Lf%%\t";
-static const size_t USED_COLS_AMOUNT = 8;
-
 void* analyzer_func(void* param)
 {
     lifetime_struct* lifetime = param;
     char* first_read = pop_once_analyzer(lifetime);
     cpu_amount = count_cores(first_read);
+    init_data();
     first_process(first_read);
     free(first_read);
 
@@ -62,7 +65,7 @@ void calculate_usage(char* curr_read, size_t* idle, size_t* total)
     {
         *total += new_data[j];
     }
-    *idle = new_data[3] + new_data[4];
+    *idle = new_data[IDLE_COLUMN_INDEX] + new_data[IOWAIT_COLUMN_INDEX];
     free(new_data);
 }
 
@@ -100,11 +103,6 @@ char* process_data(char* curr_read)
 
 void first_process(char* curr_read)
 {
-    prev_idle = malloc(sizeof(size_t*) * cpu_amount);
-    prev_total = malloc(sizeof(size_t*) * cpu_amount);
-    curr_idle = malloc(sizeof(size_t*) * cpu_amount);
-    curr_total = malloc(sizeof(size_t*) * cpu_amount);
-
     curr_read = strstr(curr_read, "cpu0");
     for (size_t i = 0; i < cpu_amount; i++)
     {
@@ -116,7 +114,10 @@ void first_process(char* curr_read)
 
 void init_data()
 {
-    
+    prev_idle = malloc(sizeof(size_t*) * cpu_amount);
+    prev_total = malloc(sizeof(size_t*) * cpu_amount);
+    curr_idle = malloc(sizeof(size_t*) * cpu_amount);
+    curr_total = malloc(sizeof(size_t*) * cpu_amount);
 }
 
 char* pop_once_analyzer(lifetime_struct* ltime)
